@@ -14,55 +14,56 @@
  * limitations under the License.
  */
 
- .mdl-card {
-    width: 100%;
-  }
-  
-  #demo-sign-in-card > .mdl-card__title {
-    height: 125px;
-  }
-  
-  #demo-create-message-result {
-    margin-left: 10px;
-  }
-  
-  .mdl-textfield, .mdl-textfield > textarea {
-    width: 100%;
-    resize: none;
-  }
-  
-  h5 {
-    margin: 20px 5px;
-  }
-  
-  button:not(:first-child) {
-    margin-left: 5px;
-  }
-  
-  li:hover {
-    background-color: rgba(158,158,158,.2);
-    cursor: pointer;
-  }
-  
-  li.selected {
-    background-color: rgba(158,158,158,.4);
-  }
-  
-  .demo-create-message {
-    padding: 10px;
-  }
-  
-  .demo-message-list,
-  .demo-message-details {
-    padding-left: 10px;
-  }
-  
-  .demo-message-list > ul {
-    height: 335px;
-    overflow: auto;
-  }
-  
-  .demo-message-details > pre {
-    height: 400px;
-    overflow: auto;
-  }
+.mdl-card {
+	width: 100%;
+}
+
+#ochat-sign-in-card > .mdl-card__title {
+	height: 125px;
+}
+
+#ochat-create-message-result {
+	margin-left: 10px;
+}
+
+.mdl-textfield,
+.mdl-textfield > textarea {
+	width: 100%;
+	resize: none;
+}
+
+h5 {
+	margin: 20px 5px;
+}
+
+button:not(:first-child) {
+	margin-left: 5px;
+}
+
+li:hover {
+	background-color: rgba(158, 158, 158, 0.2);
+	cursor: pointer;
+}
+
+li.selected {
+	background-color: rgba(158, 158, 158, 0.4);
+}
+
+.ochat-create-message {
+	padding: 10px;
+}
+
+.ochat-message-list,
+.ochat-message-details {
+	padding-left: 10px;
+}
+
+.ochat-message-list > ul {
+	height: 335px;
+	overflow: auto;
+}
+
+.ochat-message-details > pre {
+	height: 400px;
+	overflow: auto;
+}

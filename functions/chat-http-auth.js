@@ -1,8 +1,7 @@
-
 'use strict';
 
 const admin = require('firebase-admin');
-const cors = require('cors')({origin: true});
+const cors = require('cors')({ origin: true });
 const functions = require('firebase-functions');
 
 //let functions.config() = JSON.parse(process.env.FIREBASE_CONFIG);
@@ -12,68 +11,70 @@ const functions = require('firebase-functions');
 // `Authorization: Bearer <Firebase ID Token>`.
 // when decoded successfully, the ID Token content will be added as `req.user`.
 module.exports = {
-    authenticate : function(req, res, next) {
-        console.log('authenticate');
+	authenticate: function (req, res, next) {
+		console.log('authenticate');
 
-        // if (req.method === `OPTIONS`) {
-        //   return next();
-        // }
+		// if (req.method === `OPTIONS`) {
+		//   return next();
+		// }
 
-        cors(req, res, () => {
+		cors(req, res, () => {
+			console.log('req.headers.authorization', req.headers.authorization);
+			console.log('req.query.token', req.query.token);
+			let authHeader = false;
+			let authQueryStr = false;
 
-            console.log('req.headers.authorization', req.headers.authorization);
-            console.log('req.query.token', req.query.token);
-            let authHeader = false;
-            let authQueryStr = false;
+			if (
+				req.headers.authorization &&
+				req.headers.authorization.startsWith('Bearer ')
+			) {
+				authHeader = true;
+			}
 
-            if (req.headers.authorization && req.headers.authorization.startsWith('Bearer '))  {
-                authHeader = true;
-            }
+			if (req.query.token) {
+				authQueryStr = true;
+			}
 
-            if (req.query.token) {
-                authQueryStr = true;
-            }
+			if (authHeader == false && authQueryStr == false) {
+				console.log('authorization not present');
+				res.status(403).send('Unauthorized');
+				return;
+			}
+			let idToken;
+			if (authHeader) {
+				idToken = req.headers.authorization.split('Bearer ')[1];
+			}
 
-            if (authHeader==false && authQueryStr==false){
-                console.log('authorization not present');
-                res.status(403).send('Unauthorized');
-                return;
-            }
-            let idToken;
-            if (authHeader) {
-                idToken = req.headers.authorization.split('Bearer ')[1];  
-            }
-           
-            if (authQueryStr) {
-                idToken = req.query.token;
-                
-                let secretToken = functions.config().secret && functions.config().secret.token ? functions.config().secret.token : "chat21-secret-orgAa,";
-                console.log('secretToken',secretToken);
+			if (authQueryStr) {
+				idToken = req.query.token;
 
-                //TODO move to firebase config 
-                if (idToken==secretToken){
-                    var newUser = {uid:"system"};
-                    req.user = newUser
-                    return next();
-                }
-            }
+				let secretToken =
+					functions.config().secret && functions.config().secret.token
+						? functions.config().secret.token
+						: 'AqVJdhBIncIni5qLy1eSspS6508Ia2jT,';
+				console.log('secretToken', secretToken);
 
-            console.log('idToken', idToken);
-            admin.auth().verifyIdToken(idToken).then((decodedIdToken) => {
-                req.user = decodedIdToken;
-                console.log('req.user', req.user);
+				//TODO move to firebase config
+				if (idToken == secretToken) {
+					var newUser = { uid: 'system' };
+					req.user = newUser;
+					return next();
+				}
+			}
 
-                return next();
-            }).catch(() => {
-                res.status(403).send('Unauthorized');
-            });
+			console.log('idToken', idToken);
+			admin
+				.auth()
+				.verifyIdToken(idToken)
+				.then((decodedIdToken) => {
+					req.user = decodedIdToken;
+					console.log('req.user', req.user);
 
-
-        });
-
-
-    }
-
-
-}
-
+					return next();
+				})
+				.catch(() => {
+					res.status(403).send('Unauthorized');
+				});
+		});
+	},
+};

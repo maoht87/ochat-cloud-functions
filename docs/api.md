@@ -1,12 +1,13 @@
-
 # REST API
-Below are described the REST API of Chat21:
+
+Below are described the REST API of OChat:
 
 ## Authentication
 
 We support two authentication methods : JWT and Shared Secret
 
 ### JWT Authentication
+
 Generate a Firebase token with:
 
 ```
@@ -15,7 +16,7 @@ Generate a Firebase token with:
     -d '{"email":"<USER_EMAIL>","password":"<USER_PASSWORD>","returnSecureToken":true}'
 ```
 
-The API_KEY is the firebase API KEY available under the Settings page of your Firebase project. 
+The API_KEY is the firebase API KEY available under the Settings page of your Firebase project.
 You can find the API KEY in:
 (gear-next-to-project-name) > Project Settings > Cloud Messaging
 
@@ -33,8 +34,8 @@ More info here : https://firebase.google.com/docs/reference/rest/auth/#section-s
 
 ### Secret Authentication (for admin)
 
-To authenticate you can add the token query parameter to the endpoints. Example : ```?token=chat21-secret-orgAa,```
-You can change the secret token for your installation with ```firebase functions:config:set secret.token=MYSECRET```
+To authenticate you can add the token query parameter to the endpoints. Example : `?token=chat21-secret-orgAa,`
+You can change the secret token for your installation with `firebase functions:config:set secret.token=MYSECRET`
 
 ## Send a message
 
@@ -47,20 +48,22 @@ You can send a message making a POST call to the endpoint :
        -d '{"sender_fullname": "<SENDER_FULLNAME>", "recipient_id": "<RECIPIENT_ID>", "recipient_fullname":"<RECIPIENT_FULLNAME>","text":"<MESSAGE_TEXT>", "channel_type": "<CHANNEL_TYPE>", "type": "<TYPE>", "attributes": "<ATTRIBUTES>", "metadata": "<METADATA>"}' \
       'https://us-central1-<FIREBASE_PROJECT_ID>.cloudfunctions.net/api/<APP_ID>/messages'
 ```
-Where :
-- FIREBASE_ID_TOKEN : is a JWT token generated using JWT Authentication Method
-- SENDER_FULLNAME: is the Sender Fullname. Ex: Andrea Leo
-- RECIPIENT_ID: it's the recipient id of the message. The recipient id is the user id for direct message and the group id for group messaging.
-- RECIPIENT_FULLNAME: is the Recipient Fullname. Ex: Andrea Sponziello
-- MESSAGE_TEXT: it's the message text
-- CHANNEL_TYPE: it's the channel type. "direct" value for one-to-one direct message and "group" for group messaging. Available values: direct (default) and group.
-- TYPE: it's the message type. "text" value for textual message and "image" for sending image message(you must set metadata field). Available values: text (default) and image.
-- ATTRIBUTES:  it's the message custom attributes. Example: attributes = {"custom_attribute1": "value1"}. 
-- METADATA: it's the image properties: src is the absolute source path of the image, width is the image width, height is the image height. Example: metadata = { "src": "https://www.tiledesk.com/wp-content/uploads/2018/03/tiledesk-logo.png", "width": 200, "height": 200 }
-- FIREBASE_PROJECT_ID: it's the Firebase project id. Find it on Firebase Console
-- APP_ID: It's the appid usend on multitenant environment. Use  "default" as default value
 
-Example. Send a direct message to recipient id U4HL3GWjBsd8zLX4Vva0s7W2FN92 : 
+Where :
+
+-   FIREBASE_ID_TOKEN : is a JWT token generated using JWT Authentication Method
+-   SENDER_FULLNAME: is the Sender Fullname. Ex: Andrea Leo
+-   RECIPIENT_ID: it's the recipient id of the message. The recipient id is the user id for direct message and the group id for group messaging.
+-   RECIPIENT_FULLNAME: is the Recipient Fullname. Ex: Andrea Sponziello
+-   MESSAGE_TEXT: it's the message text
+-   CHANNEL_TYPE: it's the channel type. "direct" value for one-to-one direct message and "group" for group messaging. Available values: direct (default) and group.
+-   TYPE: it's the message type. "text" value for textual message and "image" for sending image message(you must set metadata field). Available values: text (default) and image.
+-   ATTRIBUTES: it's the message custom attributes. Example: attributes = {"custom_attribute1": "value1"}.
+-   METADATA: it's the image properties: src is the absolute source path of the image, width is the image width, height is the image height. Example: metadata = { "src": "https://www.tiledesk.com/wp-content/uploads/2018/03/tiledesk-logo.png", "width": 200, "height": 200 }
+-   FIREBASE_PROJECT_ID: it's the Firebase project id. Find it on Firebase Console
+-   APP_ID: It's the appid usend on multitenant environment. Use "default" as default value
+
+Example. Send a direct message to recipient id U4HL3GWjBsd8zLX4Vva0s7W2FN92 :
 
 ```
    curl -X POST \
@@ -70,7 +73,7 @@ Example. Send a direct message to recipient id U4HL3GWjBsd8zLX4Vva0s7W2FN92 :
        'https://us-central1-chat-v2-dev.cloudfunctions.net/api/tilechat/messages'
 ```
 
-Example. Send a group message : 
+Example. Send a group message :
 
 ```
    curl -X POST \
@@ -80,8 +83,7 @@ Example. Send a group message :
        'https://us-central1-chat-v2-dev.cloudfunctions.net/api/tilechat/messages'
 ```
 
-
-Example. Send an image to recipient id U4HL3GWjBsd8zLX4Vva0s7W2FN92 : 
+Example. Send an image to recipient id U4HL3GWjBsd8zLX4Vva0s7W2FN92 :
 
 ```
    curl -X POST \
@@ -90,19 +92,23 @@ Example. Send an image to recipient id U4HL3GWjBsd8zLX4Vva0s7W2FN92 :
        -d '{"sender_fullname": "Andrea Leo", "recipient_id": "U4HL3GWjBsd8zLX4Vva0s7W2FN92", "recipient_fullname":"Andrea Leo","text":"alt text", "type":"image", "metadata": { "src": "https://www.tiledesk.com/wp-content/uploads/2018/03/tiledesk-logo.png", "width": 200, "height": 200 } }' \
        'https://us-central1-chat-v2-dev.cloudfunctions.net/api/tilechat/messages'
 ```
-Example. Send a message with PDF link to recipient id U4HL3GWjBsd8zLX4Vva0s7W2FN92 : 
+
+Example. Send a message with PDF link to recipient id U4HL3GWjBsd8zLX4Vva0s7W2FN92 :
+
 ```
 curl -X POST \
        -H 'Content-Type: application/json' \
        -H 'Authorization: Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6ImNlNWNlZDZlNDBkY2QxZWZmNDA3MDQ4ODY3YjFlZDFlNzA2Njg2YTAiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vY2hhdC12Mi1kZXYiLCJhdWQiOiJjaGF0LXYyLWRldiIsImF1dGhfdGltZSI6MTU3Nzc4OTk1OCwidXNlcl9pZCI6IjVhYWE5OTAyNGMzYjExMDAxNGI0NzhmMCIsInN1YiI6IjVhYWE5OTAyNGMzYjExMDAxNGI0NzhmMCIsImlhdCI6MTU3Nzc4OTk1OCwiZXhwIjoxNTc3NzkzNTU4LCJlbWFpbCI6ImFuZHJlYS5sZW9AZnJvbnRpZXJlMjEuaXQiLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImZpcmViYXNlIjp7ImlkZW50aXRpZXMiOnsiZW1haWwiOlsiYW5kcmVhLmxlb0Bmcm9udGllcmUyMS5pdCJdfSwic2lnbl9pbl9wcm92aWRlciI6InBhc3N3b3JkIn19.ayGVDUpP0GcPyEHo8dQ82EY6Kz2Wt2pVi8yeLvXeu4GITb4n3BZ-5XeQUFYQbshFx5GSL4gjTOZSdnoMAPoutrNRQNo0MBbnaENsbjpLBqUAomQ0l7BPIGs_S4Hwx69s2N3C5Jr6l3jp0f9PprUZhSxbCbRqx8TO-K3hYpsZ8efMl5NO0gBRl7GH_Dqu95ROZxRMxWNrQcUk0cihL0PtaKr-EcE9V547Og2FgF7p_iUomTKeSZ6Ili3N9m02aAOkEzoYqO0hPGKRnm_1Xi-1UnhTiSiDdAWuuz1hmsiWtYXz5Lru66QVUY6YE8rPWfufz0KYyBFiP2h2akBitHdyuQ' \
        -d '{"sender_fullname": "Andrea Leo", "recipient_id": "U4HL3GWjBsd8zLX4Vva0s7W2FN92", "recipient_fullname":"Andrea Leo","text":"https://www.unipg.it/files/pagine/410/4-PDF-A.pdf", "type":"text" }' \
        'https://us-central1-chat-v2-dev.cloudfunctions.net/api/tilechat/messages'
-```  
-  
+```
+
 ### Message attributes
+
 With attributes you can add custom attribute to the message as described below but you can also control internal behaviors:
-- disable push notification for each message with  attributes = {"sendnotification":false}
-- disable conversation model update with  attributes = {"updateconversation":false}
+
+-   disable push notification for each message with attributes = {"sendnotification":false}
+-   disable conversation model update with attributes = {"updateconversation":false}
 
 ## Create a Group
 
@@ -118,11 +124,12 @@ Create a chat user's group making the following POST call :
 ```
 
 Where :
-- FIREBASE_ID_TOKEN : is a JWT token generated using JWT Authentication Method
-- GROUP_NAME: it's the new group name
-- MEMBER_ID: it's the user ids of the group members
-- FIREBASE_PROJECT_ID: it's the Firebase project id. Find it on Firebase Console
-- APP_ID: It's the appid usend on multitenant environment. Use  "default" as default value
+
+-   FIREBASE_ID_TOKEN : is a JWT token generated using JWT Authentication Method
+-   GROUP_NAME: it's the new group name
+-   MEMBER_ID: it's the user ids of the group members
+-   FIREBASE_PROJECT_ID: it's the Firebase project id. Find it on Firebase Console
+-   APP_ID: It's the appid usend on multitenant environment. Use "default" as default value
 
 Example:
 
@@ -132,7 +139,6 @@ Example:
        -H 'Authorization: Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6ImUxNmI4ZWFlNTczOTk2NGM1MWJjMTUyNWI1ZmU2ZmRjY2Y1ODJjZDQifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vY2hhdC12Mi1kZXYiLCJhdWQiOiJjaGF0LXYyLWRldiIsImF1dGhfdGltZSI6MTUxOTAzOTAwNywidXNlcl9pZCI6IlU0SEwzR1dqQnNkOHpMWDRWdmEwczdXMkZOOTIiLCJzdWIiOiJVNEhMM0dXakJzZDh6TFg0VnZhMHM3VzJGTjkyIiwiaWF0IjoxNTE5MDM5MDA4LCJleHAiOjE1MTkwNDI2MDgsImVtYWlsIjoiYW5kcmVhLmxlb0Bmcm9udGllcmUyMS5pdCIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwiZmlyZWJhc2UiOnsiaWRlbnRpdGllcyI6eyJlbWFpbCI6WyJhbmRyZWEubGVvQGZyb250aWVyZTIxLml0Il19LCJzaWduX2luX3Byb3ZpZGVyIjoicGFzc3dvcmQifX0.Ri3_R60-vTpSLd6uJBTo1d9inKhGppq3A3gONS0ZcMsFlGnqti_x55fC4h4O-GInLzUnCGt-dS6Pt89svIHxjz2cnZORj9dhrKU3AyMrYIniqiuzxqWSiUvRs3mhVCAoiUvWBSbiyhSb9fStH74ihqEVE9WIu4BzalqAQP7Q-d1fkRAoHqLH4T1HpRgyvOPlvP0mMiujai6Q3xkKzcahTD-3--Hl5RtYQzNLEhy-83k2YR4pbUzPRGlfJpjFZgWdPEyM2pLt1xK91wLBB3pHRa79ciTKhxUHqXpQCWXRErVPp6ELSx0bAu5_tsjWHfQjnsJ_aQDg4xiKcrhKDePoYQ' \
        -d '{"group_name": "TestGroup1", "group_members": {"y4QN01LIgGPGnoV6ql07hwPAQg23":1}}' 'https://us-central1-chat-v2-dev.cloudfunctions.net/api/tilechat/groups'
 ```
-
 
 ## Join a Group
 
@@ -146,14 +152,13 @@ With this API the user can join (become a member) of an existing group:
        https://us-central1-<FIREBASE_PROJECT_ID>.cloudfunctions.net/api/<APP_ID>/groups/<GROUP_ID>/members
 ```
 
-
 Where :
-- FIREBASE_ID_TOKEN : is a JWT token generated using JWT Authentication Method
-- MEMBER_ID: it's the user id of the user you want to joing (become a member)
-- FIREBASE_PROJECT_ID: it's the Firebase project id. Find it on Firebase Console
-- APP_ID: It's the appid usend on multitenant environment. Use  "default" as default value
-- GROUP_ID: it's the existing group id
 
+-   FIREBASE_ID_TOKEN : is a JWT token generated using JWT Authentication Method
+-   MEMBER_ID: it's the user id of the user you want to joing (become a member)
+-   FIREBASE_PROJECT_ID: it's the Firebase project id. Find it on Firebase Console
+-   APP_ID: It's the appid usend on multitenant environment. Use "default" as default value
+-   GROUP_ID: it's the existing group id
 
 Example:
 
@@ -169,7 +174,6 @@ Example:
 
 With this API the user can leave of an existing group:
 
-
 ```
     curl  -X DELETE \
        -H 'Content-Type: application/json' \
@@ -178,11 +182,12 @@ With this API the user can leave of an existing group:
 ```
 
 Where :
-- FIREBASE_ID_TOKEN : is a JWT token generated using JWT Authentication Method
-- FIREBASE_PROJECT_ID: it's the Firebase project id. Find it on Firebase Console
-- APP_ID: It's the appid usend on multitenant environment. Use  "default" as default value
-- GROUP_ID: it's the existing group id
-- MEMBER_ID: it's the user id of the user you want to leave a group
+
+-   FIREBASE_ID_TOKEN : is a JWT token generated using JWT Authentication Method
+-   FIREBASE_PROJECT_ID: it's the Firebase project id. Find it on Firebase Console
+-   APP_ID: It's the appid usend on multitenant environment. Use "default" as default value
+-   GROUP_ID: it's the existing group id
+-   MEMBER_ID: it's the user id of the user you want to leave a group
 
 Example:
 
@@ -193,12 +198,9 @@ Example:
         https://us-central1-chat-v2-dev.cloudfunctions.net/api/tilechat/groups/-L5hnLkBGQoW05ax9ehg/members/81gLZhYmpTZM0GGuUI9ovD7RaCZ2
 ```
 
-
-
 ## Set Group members
 
 With this API you can set the group members
-
 
 ```
     curl -X PUT \
@@ -209,11 +211,12 @@ With this API you can set the group members
 ```
 
 Where :
-- FIREBASE_ID_TOKEN : is a JWT token generated using JWT Authentication Method
-- FIREBASE_PROJECT_ID: it's the Firebase project id. Find it on Firebase Console
-- MEMBER_IDs: it's the user ids of the group members
-- APP_ID: It's the appid usend on multitenant environment. Use  "default" as default value
-- GROUP_ID: it's the existing group id
+
+-   FIREBASE_ID_TOKEN : is a JWT token generated using JWT Authentication Method
+-   FIREBASE_PROJECT_ID: it's the Firebase project id. Find it on Firebase Console
+-   MEMBER_IDs: it's the user ids of the group members
+-   APP_ID: It's the appid usend on multitenant environment. Use "default" as default value
+-   GROUP_ID: it's the existing group id
 
 Example:
 
@@ -224,7 +227,6 @@ Example:
        -d '{"members": {"system":1}}' \
         https://us-central1-chat-v2-dev.cloudfunctions.net/api/tilechat/groups/support-group-L5xro2P81zHs7YA7-DX/members
 ```
-
 
 ## Delete a message from the personal timeline
 
@@ -238,11 +240,12 @@ Delete a message from the personal timeline of a conversation specified by a REC
 ```
 
 Where :
-- FIREBASE_ID_TOKEN : is a JWT token generated using JWT Authentication Method
-- FIREBASE_PROJECT_ID: it's the Firebase project id. Find it on Firebase Console
-- APP_ID: It's the appid usend on multitenant environment. Use  "default" as default value
-- RECIPIENT_ID: it's the recipient id
-- MESSAGE_ID: it's the message id
+
+-   FIREBASE_ID_TOKEN : is a JWT token generated using JWT Authentication Method
+-   FIREBASE_PROJECT_ID: it's the Firebase project id. Find it on Firebase Console
+-   APP_ID: It's the appid usend on multitenant environment. Use "default" as default value
+-   RECIPIENT_ID: it's the recipient id
+-   MESSAGE_ID: it's the message id
 
 Example:
 
@@ -257,7 +260,6 @@ Example:
 
 Delete a message from all the timelines of a conversation specified by a RECIPIENT_ID
 
-
 ```
     curl  -X DELETE \
        -H 'Content-Type: application/json' \
@@ -265,14 +267,13 @@ Delete a message from all the timelines of a conversation specified by a RECIPIE
        'https://us-central1-<project-id>.cloudfunctions.net/api/<APP_ID>/messages/<RECIPIENT_ID>/<MESSAGE_ID>?all=true&channel_type=group'
 ```
 
-
 Where :
-- FIREBASE_ID_TOKEN : is a JWT token generated using JWT Authentication Method
-- FIREBASE_PROJECT_ID: it's the Firebase project id. Find it on Firebase Console
-- APP_ID: It's the appid usend on multitenant environment. Use  "default" as default value
-- RECIPIENT_ID: it's the recipient id
-- MESSAGE_ID: it's the message id
 
+-   FIREBASE_ID_TOKEN : is a JWT token generated using JWT Authentication Method
+-   FIREBASE_PROJECT_ID: it's the Firebase project id. Find it on Firebase Console
+-   APP_ID: It's the appid usend on multitenant environment. Use "default" as default value
+-   RECIPIENT_ID: it's the recipient id
+-   MESSAGE_ID: it's the message id
 
 Example:
 
@@ -284,7 +285,6 @@ Example:
 
 
 ```
-
 
 ## Archive or delete a conversation
 
@@ -298,11 +298,12 @@ Archive or delete a conversation from the personal timeline specified by a RECIP
 ```
 
 Where :
-- FIREBASE_ID_TOKEN : is a JWT token generated using JWT Authentication Method
-- FIREBASE_PROJECT_ID: it's the Firebase project id. Find it on Firebase Console
-- APP_ID: It's the appid usend on multitenant environment. Use  "default" as default value
-- RECIPIENT_ID: it's the recipient id
-- delete:  (Optional) if true permanently deletes the conversation, if false archives the conversation
+
+-   FIREBASE_ID_TOKEN : is a JWT token generated using JWT Authentication Method
+-   FIREBASE_PROJECT_ID: it's the Firebase project id. Find it on Firebase Console
+-   APP_ID: It's the appid usend on multitenant environment. Use "default" as default value
+-   RECIPIENT_ID: it's the recipient id
+-   delete: (Optional) if true permanently deletes the conversation, if false archives the conversation
 
 Example:
 
@@ -312,7 +313,6 @@ Example:
        -H 'Authorization: Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6IjdhM2QxOTA0ZjE4ZTI1Nzk0ODgzMWVhYjgwM2UxMmI3OTcxZTEzYWIifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vY2hhdC12Mi1kZXYiLCJhdWQiOiJjaGF0LXYyLWRldiIsImF1dGhfdGltZSI6MTUyODg3NjAwNywidXNlcl9pZCI6IjVhYWE5OTAyNGMzYjExMDAxNGI0NzhmMCIsInN1YiI6IjVhYWE5OTAyNGMzYjExMDAxNGI0NzhmMCIsImlhdCI6MTUyODg3NjAwNywiZXhwIjoxNTI4ODc5NjA3LCJlbWFpbCI6ImFuZHJlYS5sZW9AZnJvbnRpZXJlMjEuaXQiLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImZpcmViYXNlIjp7ImlkZW50aXRpZXMiOnsiZW1haWwiOlsiYW5kcmVhLmxlb0Bmcm9udGllcmUyMS5pdCJdfSwic2lnbl9pbl9wcm92aWRlciI6InBhc3N3b3JkIn19.OMLzWOQ9tQroiZuHKZSkWf_JDPAjueYthJXD86ZRIX1LOxlXfewJG3Reb71gXcIggLtrrqfDLw7h9JLSpMuuSl8sZW6ppiMPcwHMdZbFT4kMz-k5wEjkIQaRSua8BKVXnl65TR3hX7xqAvV8F65pRzyndauBOv1mq6o1JfDBKXPDk5O-sXufa3G7ShApjvtW9XAqC6PxnutuoniUGxZhZj1pXn2zlBLFnFcONZNaT1vDfRruAZatmxh41Gc5i04aj0mhqcu2HciJ37qIF2uDY1WkrMs4VUDd-PH1iI4IKKh3k2CXNrPVKQEzR_nL_NyLh_ZnfL8kewLaGFjQOGo0Xg' \
         https://us-central1-chat-v2-dev.cloudfunctions.net/api/tilechat/conversations/y4QN01LIgGPGnoV6ql07hwPAQg23/
 ```
-
 
 ## Create a Contact
 
@@ -327,16 +327,14 @@ Create a new contact.
       https://us-central1-<FIREBASE_PROJECT_ID>.cloudfunctions.net/api/<APP_ID>/contacts
 ```
 
-
 Where :
-- FIREBASE_ID_TOKEN : is a JWT token generated using JWT Authentication Method
-- FIRSTNAME: it's the firstname of the contact
-- LASTNAME: it's the lastname of the contact
-- EMAIL: it's the contact email
-- FIREBASE_PROJECT_ID: it's the Firebase project id. Find it on Firebase Console
-- APP_ID: It's the appid usend on multitenant environment. Use  "default" as default value
 
-
+-   FIREBASE_ID_TOKEN : is a JWT token generated using JWT Authentication Method
+-   FIRSTNAME: it's the firstname of the contact
+-   LASTNAME: it's the lastname of the contact
+-   EMAIL: it's the contact email
+-   FIREBASE_PROJECT_ID: it's the Firebase project id. Find it on Firebase Console
+-   APP_ID: It's the appid usend on multitenant environment. Use "default" as default value
 
 Example:
 
@@ -347,7 +345,6 @@ Example:
         -d '{"firstname": "firstname", "lastname": "lastname","email": "email"}' \
     https://us-central1-chat-v2-dev.cloudfunctions.net/api/tilechat/contacts
 ```
-
 
 ## Update my FirstName and Last Name
 
@@ -362,15 +359,13 @@ Change my first and lastname:
       https://us-central1-<FIREBASE_PROJECT_ID>.cloudfunctions.net/api/<APP_ID>/contacts/me
 ```
 
-
 Where :
-- FIREBASE_ID_TOKEN : is a JWT token generated using JWT Authentication Method
-- FIRSTNAME: it's the firstname of the contact
-- LASTNAME: it's the lastname of the contact
-- FIREBASE_PROJECT_ID: it's the Firebase project id. Find it on Firebase Console
-- APP_ID: It's the appid usend on multitenant environment. Use  "default" as default value
 
-
+-   FIREBASE_ID_TOKEN : is a JWT token generated using JWT Authentication Method
+-   FIRSTNAME: it's the firstname of the contact
+-   LASTNAME: it's the lastname of the contact
+-   FIREBASE_PROJECT_ID: it's the Firebase project id. Find it on Firebase Console
+-   APP_ID: It's the appid usend on multitenant environment. Use "default" as default value
 
 Example:
 
@@ -381,7 +376,6 @@ Example:
         -d '{"firstname": "firstname", "lastname": "lastname"}' \
     https://us-central1-chat-v2-dev.cloudfunctions.net/api/tilechat/contacts/me
 ```
-
 
 ## Upload photo profile
 
@@ -395,12 +389,11 @@ Upload my photo profile
       https://us-central1-<FIREBASE_PROJECT_ID>.cloudfunctions.net/api/<APP_ID>/contacts/me/photo
 ```
 
-
 Where :
-- FIREBASE_ID_TOKEN : is a JWT token generated using JWT Authentication Method
-- FIREBASE_PROJECT_ID: it's the Firebase project id. Find it on Firebase Console
-- APP_ID: It's the appid usend on multitenant environment. Use  "default" as default value
 
+-   FIREBASE_ID_TOKEN : is a JWT token generated using JWT Authentication Method
+-   FIREBASE_PROJECT_ID: it's the Firebase project id. Find it on Firebase Console
+-   APP_ID: It's the appid usend on multitenant environment. Use "default" as default value
 
 Example:
 
@@ -410,7 +403,6 @@ Example:
        -F "image=@/Users/andrealeo/Downloads/a.jpg" \
     https://us-central1-chat-v2-dev.cloudfunctions.net/api/tilechat/contacts/me/photo
 ```
-
 
 ## Delete photo profile
 
@@ -424,12 +416,11 @@ Delete my photo profile
       https://us-central1-<FIREBASE_PROJECT_ID>.cloudfunctions.net/api/<APP_ID>/contacts/me/photo
 ```
 
-
 Where :
-- FIREBASE_ID_TOKEN : is a JWT token generated using JWT Authentication Method
-- FIREBASE_PROJECT_ID: it's the Firebase project id. Find it on Firebase Console
-- APP_ID: It's the appid usend on multitenant environment. Use  "default" as default value
 
+-   FIREBASE_ID_TOKEN : is a JWT token generated using JWT Authentication Method
+-   FIREBASE_PROJECT_ID: it's the Firebase project id. Find it on Firebase Console
+-   APP_ID: It's the appid usend on multitenant environment. Use "default" as default value
 
 Example:
 
@@ -439,7 +430,6 @@ Example:
        -H 'Authorization: Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6ImEwY2ViNDY3NDJhNjNlMTk2NDIxNjNhNzI4NmRjZDQyZjc0MzYzNjYifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vY2hhdC12Mi1kZXYiLCJhdWQiOiJjaGF0LXYyLWRldiIsImF1dGhfdGltZSI6MTUzNjIyNzExMywidXNlcl9pZCI6IjVhYWE5OTAyNGMzYjExMDAxNGI0NzhmMCIsInN1YiI6IjVhYWE5OTAyNGMzYjExMDAxNGI0NzhmMCIsImlhdCI6MTUzNjIyNzExMywiZXhwIjoxNTM2MjMwNzEzLCJlbWFpbCI6ImFuZHJlYS5sZW9AZnJvbnRpZXJlMjEuaXQiLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImZpcmViYXNlIjp7ImlkZW50aXRpZXMiOnsiZW1haWwiOlsiYW5kcmVhLmxlb0Bmcm9udGllcmUyMS5pdCJdfSwic2lnbl9pbl9wcm92aWRlciI6InBhc3N3b3JkIn19.P4S3eNL7o6MN97JF_mKcfH3qc8neO4Hf66SgdJn_Nzkmn78v9Pl6rZWQS4zohufNcocHwkZow-Cc1Mg3-X9q_huttBGhFqyhH5bMqT5cojXivgcvlHOYNZk84tFXzCHakgh9ahucJy_Fgc3s6dnglcSr5xm83TOfeL5vr4wbGJJE17WnPKxr2lhnw_T0hyJuLrG3Cdjo37FI6sMZDLw1rgqEBScTcwoC-TwxjuvT43mGhlX_aIlM0RpJz4zg56iAqARaTpoZOM7icIqx-MfVRo2A766PUrciS-54h2NZ98dLXsdqZV9eZ4Sftctfrax9mrPV2XiXxd3vpgtdc85A1A' \
     https://us-central1-chat-v2-dev.cloudfunctions.net/api/tilechat/contacts/me/photo
 ```
-
 
 # REST API for Support
 
@@ -453,15 +443,14 @@ Example:
       https://us-central1-<project-id>.cloudfunctions.net/supportapi/<APP_ID>/requests
 ```
 
-Example: 
+Example:
+
 ```
    curl -X POST \
        -H 'Content-Type: application/json' \
        -d '{"sender_fullname": "Andrea Leo", "text":"hello from API","projectid":"5ab0f32757066e0014bfd718"}' \
        'https://us-central1-chat-v2-dev.cloudfunctions.net/supportapi/tilechat/requests?token=chat21-secret-orgAa,'
 ```
-
-
 
 ## Rate the request
 
@@ -472,7 +461,8 @@ Example:
       https://us-central1-<project-id>.cloudfunctions.net/supportapi/<APP_ID>/requests/<REQUEST_ID>/rate?rating=2&rating_message=ciao
 ```
 
-Example: 
+Example:
+
 ```
    curl -X PUT \
        -H 'Content-Type: application/json' \
@@ -482,11 +472,12 @@ Example:
 ## Close Support group
 
 Where :
-- <FIREBASE_ID_TOKEN> : is a JWT token generated using JWT Authentication Method
-- <GROUP_ID>: is the group id to close
-- open: (Optional)If true reopen an existing closed group
-- <FIREBASE_PROJECT_ID>: it's the Firebase project id. Find it on Firebase Console
-- <APP_ID>: It's the appid usend on multitenant environment. Use  "default" as default value
+
+-   <FIREBASE_ID_TOKEN> : is a JWT token generated using JWT Authentication Method
+-   <GROUP_ID>: is the group id to close
+-   open: (Optional)If true reopen an existing closed group
+-   <FIREBASE_PROJECT_ID>: it's the Firebase project id. Find it on Firebase Console
+-   <APP_ID>: It's the appid usend on multitenant environment. Use "default" as default value
 
 ```
     curl -X PUT \
@@ -522,12 +513,10 @@ Example:
       https://us-central1-chat-v2-dev.cloudfunctions.net/api/tilechat/users/u2K7nLo2dTZEOYYTykrufN6BDF92/settings/email?token=chat21-secret-orgAa,
 ```
 
-
 ## Webhook
 
-* Enable webhook with ```firebase functions:config:set webhook.enabled=true```
-* Set on new message webhook url with : ```firebase functions:config:set webhook.onmessage.url=http://localhost:3000/requests```
-
+-   Enable webhook with `firebase functions:config:set webhook.enabled=true`
+-   Set on new message webhook url with : `firebase functions:config:set webhook.onmessage.url=http://localhost:3000/requests`
 
 TODO
 

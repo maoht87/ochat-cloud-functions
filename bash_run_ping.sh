@@ -8,8 +8,8 @@ echo RUN
 
 curl -X POST \
        -H 'Content-Type: application/json' \
-       -d '{"sender_fullname": "Bash", "text":"ping from API","projectid":"5b45e1c75313c50014b3abc6"}' \
-       'https://us-central1-chat-v2-dev.cloudfunctions.net/supportapi/tilechat/requests?token=chat21-secret-orgAa,'
+       -d '{"sender_fullname": "Bash", "text":"ping from API","projectid":"ochat-2a540"}' \
+       'https://us-central1-ochat-2a540.cloudfunctions.net/supportapi/tilechat/requests?token=AqVJdhBIncIni5qLy1eSspS6508Ia2jT,'
 
 
 sleep 2; 
